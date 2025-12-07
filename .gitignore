@@ -1,7 +1,5 @@
 # Environment Variables
 .env
-.env.*
-.env.local
 
 # Node Modules
 node_modules/
@@ -9,3 +7,6 @@ node_modules/
 # OS / Editor Files
 .DS_Store
 Thumbs.db
+
+
+dbTest.js
