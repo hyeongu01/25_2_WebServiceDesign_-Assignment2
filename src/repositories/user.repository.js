@@ -1,52 +1,57 @@
-const { where } = require("sequelize");
-
 const {User} = require("../models");
 
 module.exports = {
-    createUser(userData, transaction = null) {
+    create(userData, transaction = null) {
         return User.create(userData, { transaction });
     },
 
-    findAll(transaction = null) {
-        return User.findAll({ transaction });
+    findAll(options = {}, transaction = null) {
+        return User.findAll({ ...options, transaction });
     },
 
-    findById(id, transaction = null) {
-        return User.findByPk(id, { transaction });
+    findOneById(id, options = {}, transaction = null) {
+        return User.findByPk(id, { ...options, transaction });
     },
 
-    findByUsername(username, transaction = null) {
+    findOneByUsername(username, transaction = null) {
         return User.findOne({
             where: { username },
+            ...options,
             transaction
         });
     },
 
-    findByEmail(email, transaction = null) {
+    findOneByEmail(email, transaction = null) {
         return User.findOne({
             where: { email },
             transaction
         });
     },
 
-    updateUser(id, newData, transaction = null) {
+    update(id, newData, transaction = null) {
         return User.update(newData, {
             where: { id },
             transaction
         });
     },
 
-    softDeleteUser(id, transaction = null) {
+    delete(id, transaction = null) {
         return User.destroy({
             where: { id },
             transaction
         });
     },
 
-    restoreUser(id, transaction = null) {
+    restore(id, transaction = null) {
         return User.restore({
             where: { id },
             transaction
         });
     }
 };
+
+// module.exports.create({
+//     username: "admin",
+//     hashed_password: "hashedpassword",
+//     name: "최현우"
+// })

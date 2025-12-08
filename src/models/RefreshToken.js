@@ -30,6 +30,4 @@ const RefreshToken = sequelize.define("Refresh_Token", {
     paranoid: false,
 });
 
-sequelize.sync({alter: true})
-
 module.exports = RefreshToken;

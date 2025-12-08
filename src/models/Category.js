@@ -1,22 +1,20 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/sequelize");
 
-const Wishlist = sequelize.define("Wishlist", {
+const Category = sequelize.define("Category", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    user_id: {
-        type: DataTypes.INTEGER,
+    name: {
+        type: DataTypes.STRING(30),
         allowNull: false,
-        unique: true,
-    }
+    },
 }, {
     timestamps: false,
-    tableName: "Wishlist",
-    paranoid: false,
-    underscored: true
-})
+    tableName: "Category",
+    underscored: true,
+});
 
-module.exports = Wishlist;
+module.exports = Category;

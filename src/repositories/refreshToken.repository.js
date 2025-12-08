@@ -4,36 +4,33 @@ require('dotenv').config({path: "./src/config/.env"})
 const period = Number(process.env.REFRESH_TOKEN_PERIOD) || 604800000;
 
 module.exports = {
-    createToken(userId, token) {
-        return RefreshToken.create({
-            user_id: userId,
-            token: token,
-            expired_at: Date.now() + period
-        })
+    create(data, transaction = null) {
+        return RefreshToken.create(data, {transaction})
     },
 
-    findByToken(token) {
-        return RefreshToken.findOne({where: {token}})
+    findOneByToken(token, transaction = null) {
+        return RefreshToken.findOne({where: {token}, transaction})
     },
 
-    findByUserId(userId) {
-        return RefreshToken.findAll({where: {user_id: userId}})
+    findAllByUserId(userId, transaction = null) {
+        return RefreshToken.findAll({where: {user_id: userId}, transaction})
     },
 
-    deleteToken(token) {
-        return RefreshToken.destroy({where: {token}})
+    deleteByToken(token, transaction = null) {
+        return RefreshToken.destroy({where: {token}, transaction})
     },
 
-    revokeToken(token) {
+    revokeByToken(token, transaction = null) {
         return RefreshToken.update(
-            {revoked_at: Date.now()}, 
-            {where: {token}}
+            {revoked_at: new Date()}, 
+            {where: {token}, transaction}
         );
     },
 
-    deleteTokenByUserId(userId) {
+    deleteByUserId(userId, transaction = null) {
         return RefreshToken.destroy({
-            where: {user_id: userId}
+            where: {user_id: userId},
+            transaction
         });
     }
 }

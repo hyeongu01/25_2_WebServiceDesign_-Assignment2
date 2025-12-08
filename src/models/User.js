@@ -32,7 +32,7 @@ const User = sequelize.define("User", {
         unique: true,
     },
     role: {
-        type: DataTypes.ENUM("CUSTOMER", "OWNER", "ADMIN"),
+        type: DataTypes.ENUM("CUSTOMER", "SELLER", "ADMIN"),
         defaultValue: "CUSTOMER",
     },
 }, {
@@ -41,7 +41,5 @@ const User = sequelize.define("User", {
     tableName: "User",
     underscored: true
 });
-
-sequelize.sync({alter: true})
 
 module.exports = User;
