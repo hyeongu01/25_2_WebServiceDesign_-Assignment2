@@ -22,8 +22,8 @@ User.hasMany(RefreshToken, { foreignKey: "user_id" });
 RefreshToken.belongsTo(User, { foreignKey: "user_id" });
 
 // 위시리스트
-User.hasOne(Wishlist, { foreignKey: "user_id" });
-Wishlist.belongsTo(User, { foreignKey: "user_id" });
+User.hasOne(Wishlist, { foreignKey: "user_id", onDelete: "CASCADE"});
+Wishlist.belongsTo(User, { foreignKey: "user_id", onDelete: "CASCADE" });
 
 // 위시리스트 아이템
 Wishlist.hasMany(Wishlist_Item, { foreignKey: "wishlist_id" });
