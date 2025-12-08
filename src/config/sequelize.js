@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-require("dotenv").config();
+require("dotenv").config({path: "./src/config/.env"});
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,     // 데이터베이스 이름

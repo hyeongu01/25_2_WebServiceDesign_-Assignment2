@@ -25,8 +25,12 @@ const RefreshToken = sequelize.define("Refresh_Token", {
         allowNull: false 
     },
     revoked_at: { 
-        type: DataTypes.DATE 
+        type: DataTypes.DATE,
+        defaultValue: null
     },
+}, {
+    tableName: "Refresh_Token",
+    paranoid: false,
 });
 
 
