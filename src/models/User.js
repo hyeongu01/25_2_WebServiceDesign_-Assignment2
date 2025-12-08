@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/sequelize");
 
+
 const User = sequelize.define("User", {
     id: {
         type: DataTypes.INTEGER,
@@ -18,7 +19,7 @@ const User = sequelize.define("User", {
     },
     name: {
         type: DataTypes.STRING(50),
-        defaultValue: null,
+        allowNull: false,
     },
     email: {
         type: DataTypes.STRING(50),
@@ -40,5 +41,7 @@ const User = sequelize.define("User", {
     tableName: "User",
     underscored: true
 });
+
+sequelize.sync({alter: true})
 
 module.exports = User;

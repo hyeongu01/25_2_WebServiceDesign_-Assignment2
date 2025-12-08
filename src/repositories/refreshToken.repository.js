@@ -1,4 +1,4 @@
-const RefreshToken = require("../models/RefreshToken");
+const {RefreshToken} = require("../models");
 require('dotenv').config({path: "./src/config/.env"})
 
 const period = Number(process.env.REFRESH_TOKEN_PERIOD) || 604800000;

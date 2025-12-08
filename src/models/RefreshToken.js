@@ -11,10 +11,6 @@ const RefreshToken = sequelize.define("Refresh_Token", {
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: User,
-            key: "id"
-        }
     },
     token: { 
         type: DataTypes.STRING, 
@@ -30,8 +26,10 @@ const RefreshToken = sequelize.define("Refresh_Token", {
     },
 }, {
     tableName: "Refresh_Token",
+    timestamps: false,
     paranoid: false,
 });
 
+sequelize.sync({alter: true})
 
 module.exports = RefreshToken;

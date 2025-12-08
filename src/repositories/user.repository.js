@@ -1,38 +1,52 @@
 const { where } = require("sequelize");
-const User = require("../models/User");
+
+const {User} = require("../models");
 
 module.exports = {
-    createUser(userData) {
-        return User.create(userData);
+    createUser(userData, transaction = null) {
+        return User.create(userData, { transaction });
     },
 
-    findAll() {
-        return User.findAll();
+    findAll(transaction = null) {
+        return User.findAll({ transaction });
     },
 
-    findById(id) {
-        return User.findByPk(id);
+    findById(id, transaction = null) {
+        return User.findByPk(id, { transaction });
     },
 
-    findByUsername(username) {
-        return User.findOne({where: {username}});
+    findByUsername(username, transaction = null) {
+        return User.findOne({
+            where: { username },
+            transaction
+        });
     },
 
-    findByEmail(email) {
-        return User.findOne({where: {email}});
+    findByEmail(email, transaction = null) {
+        return User.findOne({
+            where: { email },
+            transaction
+        });
     },
 
-    updateUser(id, newData) {
-        return User.update(newData, { where: { id }});
+    updateUser(id, newData, transaction = null) {
+        return User.update(newData, {
+            where: { id },
+            transaction
+        });
     },
 
-    softDeleteUser(id) {
-        return User.destroy({where: {id}});
+    softDeleteUser(id, transaction = null) {
+        return User.destroy({
+            where: { id },
+            transaction
+        });
     },
 
-    restoreUser(id) {
-        return User.restore({where: {id}});
+    restoreUser(id, transaction = null) {
+        return User.restore({
+            where: { id },
+            transaction
+        });
     }
-}
-
-
+};
