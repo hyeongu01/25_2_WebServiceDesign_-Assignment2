@@ -7,7 +7,7 @@ module.exports = {
     },
 
     // r
-    findAll({options = {}, transaction = null} = {}) {
+    findAll(options = {}, transaction = null) {
         return Author.findAll({...options, transaction});
     },
 
