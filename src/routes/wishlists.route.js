@@ -8,6 +8,6 @@ router.get("/");
 router.post("/items");
 
 // 위시리스트 아이템 삭제
-router.post("/items/:bookId");
+router.delete("/items/:bookId");
 
 module.exports = router;
