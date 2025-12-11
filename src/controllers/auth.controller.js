@@ -1,5 +1,6 @@
 const BadRequestError = require("../errors/BasRequest")
 const authService = require("../services/auth.service")
+const NotFoundError = require("../errors/BasRequest")
 
 module.exports = {
     // 회원가입
@@ -21,7 +22,6 @@ module.exports = {
             const error = new BadRequestError("name 이 없습니다.");
             return res.status(error.statusCode).json(error.response());
         }
-        
 
         authService.signup({
             username,
@@ -40,7 +40,8 @@ module.exports = {
             })
         }).catch(err => {
             console.log(err)
-            return res.status(Number(err.statusCode) || 404).json(err.response() || {error: "DB Error!", message: "DB Error!"});
+            const customError = new NotFoundError(err.message);
+            return res.status(Number(customError.statusCode)).json(customError.response());
         })
     },
 
@@ -58,5 +59,62 @@ module.exports = {
             const error = new BadRequestError("password 이 없습니다.");
             return res.status(error.statusCode).json(error.response());
         }
+
+        authService.login({
+            username, 
+            password
+        }).then(data => {
+            return res.status(200).json({
+                data: data,
+                meta: {
+                    timestamp: new Date()
+                }
+            })
+        }).catch(err => {
+            return res.status(err.statusCode).json(err.response())
+        })
+    },
+
+    logout(req, res) {
+        // refresh Token 이 있는지 검증
+        const {refreshToken} = req.body;
+
+        if (!refreshToken) {
+            const error = new BadRequestError("refreshToken 필드 누락");
+            return res.status(error.statusCode).json(error.response());
+        }
+
+        authService.logout(req.user, refreshToken)
+            .then(data => {
+                return res.status(200).json({
+                    data: data,
+                    meta: {
+                        timestamp: new Date()
+                    }
+                })
+            }).catch(err => {
+                return res.status(err.statusCode).json(err.response());
+            })
+    },
+
+    refresh(req, res) {
+        const {refreshToken} = req.body;
+
+        if (!refreshToken) {
+            const error = new BadRequestError("refreshToken 필드 누락");
+            return res.status(error.statusCode).json(error.response());
+        }
+
+        authService.refresh(req.user, refreshToken)
+            .then(data => {
+                return res.status(201).json({
+                    data: data,
+                    meta: {
+                        timestamp: new Date()
+                    }
+                })
+            }).catch(err => {
+                return res.status(err.statusCode).json(err.response());
+            })
     }
 }

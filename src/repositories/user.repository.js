@@ -13,7 +13,7 @@ module.exports = {
         return User.findByPk(id, { ...options, transaction });
     },
 
-    findOneByUsername(username, transaction = null) {
+    findOneByUsername(username, options = {}, transaction = null) {
         return User.findOne({
             where: { username },
             ...options,

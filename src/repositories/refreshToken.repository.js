@@ -1,7 +1,4 @@
 const {RefreshToken} = require("../models");
-require('dotenv').config({path: "./src/config/.env"})
-
-const period = Number(process.env.REFRESH_TOKEN_PERIOD) || 604800000;
 
 module.exports = {
     create(data, transaction = null) {
@@ -18,6 +15,13 @@ module.exports = {
 
     deleteByToken(token, transaction = null) {
         return RefreshToken.destroy({where: {token}, transaction})
+    },
+
+    revokeById(id, transaction = null) {
+        return RefreshToken.update(
+            {revoked_at: new Date()},
+            {where: {id}, transaction}
+        )
     },
 
     revokeByToken(token, transaction = null) {
