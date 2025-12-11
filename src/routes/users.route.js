@@ -2,11 +2,6 @@ const express = require("express");
 const router = express.Router();
 const UserController = require("../controllers/users.controller");
 
-// 생성
-router.post("/", (req, res) => {
-    res.send("create user");
-});
-
 // 조회
 router.get("/:id", (req, res) => {
     res.send(`${req.params.id} 유저 조회`)

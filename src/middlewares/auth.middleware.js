@@ -24,5 +24,11 @@ module.exports = {
         } catch(err) {
             return next(new UnauthorizedError("JWT 토큰이 유효하지 않거나 만료되었습니다."))
         }
+    },
+
+    authenticateRole(allowedRoles = []) {
+        return (req, res, next) => {
+
+        }
     }
 }

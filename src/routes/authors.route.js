@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
+const authorController = require("../controllers/author.controller")
+
 // 저자 생성
 router.post("/");
 
 // 저자들 확인
 router.get('/');
 
-//저자 상세 확인
+// 저자 상세 확인
 router.get("/:id");
 
 // 저자 수정
