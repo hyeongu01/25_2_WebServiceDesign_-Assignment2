@@ -1,16 +1,11 @@
-/**
- * @openapi
- * tags:
- *   - name: Authors
- *     description: Author endpoints
- */
 const express = require("express");
 const router = express.Router();
+const AuthorController = require("../controllers/author.controller")
 
-const authorController = require("../controllers/author.controller")
+const Middleware = require("../middlewares/auth.middleware");
 
 // 저자 생성
-router.post("/");
+router.post("/", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), AuthorController.create);
 
 // 저자들 확인
 router.get('/');

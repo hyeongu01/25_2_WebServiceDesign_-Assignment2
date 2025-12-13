@@ -97,7 +97,7 @@ module.exports = {
             return {
                 accessToken,
                 refreshToken,
-                accessTokenExpiresAt: jwt.verifyAccessToken(accessToken).exp * 1000,
+                accessTokenExpiresAt: new Date(jwt.verifyAccessToken(accessToken).exp * 1000),
                 user
             }
         } catch(err) {
@@ -110,6 +110,17 @@ module.exports = {
         const transaction = await sequelize.transaction();
 
         try {
+            // refreshToken 디코딩
+            const userId = jwt.verifyRefreshToken(refreshToken).id
+
+            if (!userId) {
+                throw new UnauthorizedError("refreshToken 검증 실패");
+            }
+
+            if (user.id !== userId) {
+                throw new UnauthorizedError("accessToken 과 refreshToken 의 소유자가 다릅니다.");
+            }
+
             // refreshToken 비활성화
             const token = await RefreshTokenRepository.findOneByToken(refreshToken, transaction)
             
@@ -138,16 +149,12 @@ module.exports = {
         }
     },
 
-    async refresh(user, refreshToken) {
+    async refresh(refreshToken) {
         const transaction = await sequelize.transaction();
 
         try {
             // refresh token 검증
             const decoded = jwt.verifyRefreshToken(refreshToken);
-            // 만료시간 검증
-            if (decoded.exp * 1000 < Date.now()) {
-                throw new BadRequestError("유효기간이 지난 refreshToken.");
-            }
 
             // DB refreshToken 확인
             const token = await RefreshTokenRepository.findOneByToken(refreshToken, transaction);
@@ -164,6 +171,9 @@ module.exports = {
 
             // 토큰 비활성화
             const [affected] = await RefreshTokenRepository.revokeById(token.id, transaction);
+
+            // 유저 읽기
+            const user = await UserRepository.findOneById(decoded.id, {}, transaction);
 
             if (affected === 0) {
                 throw new NotFoundError("이미 로그아웃 되었습니다..");
@@ -193,7 +203,7 @@ module.exports = {
             return {
                 accessToken: newAccessToken,
                 refreshToken: newRefreshToken,
-                accessTokenExpiresAt: jwt.verifyAccessToken(newAccessToken).exp * 1000
+                accessTokenExpiresAt: new Date(jwt.verifyAccessToken(newAccessToken).exp * 1000)
             }
 
         } catch(err) {

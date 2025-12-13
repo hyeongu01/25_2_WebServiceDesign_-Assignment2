@@ -88,7 +88,7 @@ module.exports = {
         }
 
         try {
-            const data = await authService.refresh(req.user, refreshToken);
+            const data = await authService.refresh(refreshToken);
             return res.status(201).json({ data, meta: { timestamp: new Date() } });
         } catch (err) {
             return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });

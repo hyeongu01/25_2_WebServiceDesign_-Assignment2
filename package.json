@@ -1,7 +1,7 @@
 {
   "name": "05_ws_assginment_2",
   "version": "1.0.0",
-  "description": "25_2 웹서비스 설계: 과제 2",
+  "description": "You can view generated API documentation using Swagger UI.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,13 +17,15 @@
     "url": "https://github.com/hyeongu01/25_2_WebServiceDesign_-Assignment2/issues"
   },
   "homepage": "https://github.com/hyeongu01/25_2_WebServiceDesign_-Assignment2#readme",
-  "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.15.3",
-    "sequelize": "^6.37.7"
-  }
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "type": "commonjs"
 }
