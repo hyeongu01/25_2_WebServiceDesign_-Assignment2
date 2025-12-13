@@ -16,6 +16,52 @@ const options = {
                 }
             },
             schemas: {
+                GetAllAuthorResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            type: "array",
+                            items: {
+                                $ref: "#/components/schemas/Author"
+                            }
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
+                        }
+                    }
+                },
+                CreateAuthorResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            $ref: "#/components/schemas/Author"
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
+                        }
+                    }
+                },
+                Author: {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "integer",
+                            example: 1
+                        },
+                        name: {
+                            type: "string",
+                            example: "히가시노"
+                        },
+                        birth: {
+                            type: "string",
+                            example: "2025-12-11"
+                        },
+                        description: {
+                            type: "string",
+                            description: "저자 설명"
+                        }
+                    }
+                },
                 LoginRequest: {
                     type: "object",
                     required: ["username", "password"],
