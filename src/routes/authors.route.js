@@ -28,6 +28,8 @@ module.exports = router;
  *      summary: 저자 생성 (ADMIN)
  *      tags:
  *          - Authors
+ *      security:
+ *          - bearerAuth: []
  *      requestBody:
  *          content:
  *              application/json:
@@ -95,6 +97,8 @@ module.exports = router;
  *      summary: 저자 수정 (ADMIN)
  *      tags:
  *          - Authors
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -127,6 +131,8 @@ module.exports = router;
  *      summary: 저자 삭제 (ADMIN)
  *      tags:
  *          - Authors
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id

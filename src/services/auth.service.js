@@ -203,7 +203,8 @@ module.exports = {
             return {
                 accessToken: newAccessToken,
                 refreshToken: newRefreshToken,
-                accessTokenExpiresAt: new Date(jwt.verifyAccessToken(newAccessToken).exp * 1000)
+                accessTokenExpiresAt: new Date(jwt.verifyAccessToken(newAccessToken).exp * 1000),
+                user
             }
 
         } catch(err) {

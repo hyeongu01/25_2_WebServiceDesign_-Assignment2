@@ -114,6 +114,42 @@ const options = {
                         },
                     }
                 },
+                Category: {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "integer",
+                            example: 1
+                        },
+                        name: {
+                            type: "string",
+                            example: "소설"
+                        }
+                    }
+                },
+                CreateCategoryResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            $ref: "#/components/schemas/Category"
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
+                        }
+                    }
+                },
+                GetAllCategoriesResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            type: "array",
+                            items: { $ref: "#/components/schemas/Category" }
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
+                        }
+                    }
+                },
                 SignupResponse: {
                     type: "object",
                     properties: {
