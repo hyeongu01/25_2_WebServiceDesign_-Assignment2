@@ -39,14 +39,13 @@ module.exports = router;
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: "#components/schemas/SignupResponse"
- *          400:
+ *                          $ref: "#/components/schemas/SignupResponse"
+ *          400: 
  *              description: 입력 body 누락
  *          409:
  *              description: username 충돌
  */
-
-// 회원가입 swagger
+// 로그인 swagger
 /**
  * @swagger
  * /auth/login:
@@ -67,10 +66,10 @@ module.exports = router;
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: "#components/schemas/LoginResponse"
+ *                          $ref: "#/components/schemas/LoginResponse"
  *          400:
  *              description: 입력 body 누락
- *          401:
+ *          401: 
  *              description: 비밀번호 틀림
  *          404:
  *              description: 유저를 찾을 수 없음
@@ -87,6 +86,8 @@ module.exports = router;
  *      description: 사용자 로그아웃 (refreshToken 비활성화)
  *      tags:
  *          - Auth
+ *      security:
+ *          - bearerAuth: []
  *      requestBody:
  *          required: true
  *          content:
@@ -103,6 +104,10 @@ module.exports = router;
  *      responses:
  *          200: 
  *              description: 로그아웃 성공
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/StandardResponse"
  *          400:
  *              description: 입력 body 누락 (refreshToken)
  *          401:
@@ -135,21 +140,11 @@ module.exports = router;
  *                              description: 리프레시 토큰
  *      responses:
  *          200: 
- *              description: 로그아웃 성공
+ *              description: 리프레시 성공
  *              content:
  *                  application/json:
  *                      schema:
- *                          type: object
- *                          properties:
- *                              accessToken:
- *                                  type: string
- *                                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzY1NjU3NjA3LCJleHAiOjE3NjU2NjEyMDd9.LZcPiebXRu3x8JXVwas7E0f5-SFErA8fGnLMnEhHCLM
- *                              refreshToken:
- *                                  type: string
- *                                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzY1NjU3NjA3LCJleHAiOjE3NjYyNjI0MDd9.LnI5_8xdE-UuJxbGlJtnW83SYmOfLe3rgFRinA_642U
- *                              accessTokenExpiresAt:
- *                                  type: string
- *                                  example: 2025-12-13T21:26:47.000Z
+ *                          $ref: "#/components/schemas/LoginResponse"
  *          400:
  *              description: 입력 body 누락 (refreshToken)
  *          401:

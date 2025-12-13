@@ -8,6 +8,13 @@ const options = {
             version: "1.0.0",
         },
         components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    schema: "bearer",
+                    bearerFormat: "JWT"
+                }
+            },
             schemas: {
                 LoginRequest: {
                     type: "object",
@@ -20,6 +27,83 @@ const options = {
                         password: {
                             type: "string",
                             example: "password"
+                        }
+                    }
+                },
+                Meta: {
+                    type: "object",
+                    properties: {
+                        timestamp: {
+                            type: "string",
+                            example: "2025-12-13T17:46:41.482Z"
+                        }
+                    }
+                },
+                User: {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "integer",
+                            example: 1,
+                        },
+                        username: {
+                            type: "string",
+                            example: "user123",
+                        },
+                        name: {
+                            type: "string",
+                            example: "홍길동",
+                        },
+                        email: {
+                            type: "string",
+                            example: "user123@example.com",
+                        },
+                        phone: {
+                            type: "string",
+                            example: "01012341234"
+                        },
+                        role: {
+                            type: "string",
+                            example: "CUSTOMER",
+                        },
+                    }
+                },
+                SignupResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            $ref: "#/components/schemas/User"
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
+                        }
+                    }
+                },
+                UsersResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            type: "array",
+                            items: {
+                                $ref: "#/components/schemas/User"
+                            }
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
+                        }
+                    }
+                },
+                StandardResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            oneOf: [
+                                { type: "object" },
+                                { type: "array" }
+                            ]
+                        },
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
                         }
                     }
                 },
@@ -40,19 +124,13 @@ const options = {
                                     example: "2025-12-13T17:46:41.482Z"
                                 },
                                 user: {
-                                    $ref: "#/components/schemas/SignupResponse"    
+                                    $ref: "#/components/schemas/User"
                                 }
 
                             }
                         },
                         meta: {
-                            type: "object",
-                            properties: {
-                                timestamp: {
-                                    type: "string",
-                                    example: "2025-12-13T17:46:41.482Z"
-                                }
-                            }
+                            $ref: "#/components/schemas/Meta"
                         }
 
                     }
@@ -85,46 +163,26 @@ const options = {
                     },
                 },
 
-                SignupResponse: {
-                    type: "object",
-                    properties: {
-                        id: {
-                            type: "integer",
-                            example: 1,
-                        },
-                        username: {
-                            type: "string",
-                            example: "user123",
-                        },
-                        name: {
-                            type: "string",
-                            example: "홍길동",
-                        },
-                        email: {
-                            type: "string",
-                            example: "user123@example.com",
-                        },
-                        phone: {
-                            type: "string",
-                            example: "01012341234"
-                        },
-                        role: {
-                            type: "string",
-                            example: "CUSTOMER",
-                        },
-                    },
-                },
+                
 
                 ErrorResponse: {
                     type: "object",
                     properties: {
-                        error: {
-                            type: "string",
-                            example: "bad_request"
+                        data: {
+                            type: "object",
+                            properties: {
+                                error: {
+                                    type: "string",
+                                    example: "bad_request"
+                                },
+                                message: {
+                                    type: "string",
+                                    example: "이미 존재하는 사용자입니다.",
+                                }
+                            }
                         },
-                        message: {
-                            type: "string",
-                            example: "이미 존재하는 사용자입니다.",
+                        meta: {
+                            $ref: "#/components/schemas/Meta"
                         }
                     },
                 },
