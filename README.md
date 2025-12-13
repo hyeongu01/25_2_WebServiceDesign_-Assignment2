@@ -1,3 +1,27 @@
+## API Documentation (Swagger)
+
+You can view generated API documentation using Swagger UI.
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start the server:
+
+```bash
+npm start
+```
+
+3. Open the docs in your browser: http://localhost:3000/api-docs
+
+Optional: Generate a static swagger.json file:
+
+```bash
+node tools/generate-swagger.js
+```
+
 # 25_2_WebServiceDesign_-Assignment2
 25_2 웹서비스 설계: 과제 2
 

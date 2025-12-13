@@ -1,3 +1,9 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Orders
+ *     description: Order endpoints
+ */
 const express = require("express");
 const router = express.Router();
 

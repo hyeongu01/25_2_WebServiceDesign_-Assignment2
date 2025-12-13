@@ -1,3 +1,9 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Carts
+ *     description: Cart endpoints
+ */
 const express = require("express");
 const router = express.Router();
 

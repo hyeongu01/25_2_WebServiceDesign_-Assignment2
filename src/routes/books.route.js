@@ -1,3 +1,9 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Books
+ *     description: Book endpoints
+ */
 const express = require("express");
 const router = express.Router();
 const BookController = require("../controllers/user.controller");

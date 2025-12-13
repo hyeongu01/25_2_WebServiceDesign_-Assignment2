@@ -1,3 +1,9 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Categories
+ *     description: Category endpoints
+ */
 const express = require("express");
 const router = express.Router();
 

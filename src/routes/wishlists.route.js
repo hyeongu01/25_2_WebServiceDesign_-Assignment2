@@ -1,3 +1,9 @@
+/**
+ * @openapi
+ * tags:
+ *   - name: Wishlists
+ *     description: Wishlist endpoints
+ */
 const express = require("express");
 const router = express.Router();
 

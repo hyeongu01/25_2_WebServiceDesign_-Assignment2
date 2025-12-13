@@ -1,10 +1,10 @@
-const BadRequestError = require("../errors/BasRequest")
-const authService = require("../services/auth.service")
-const NotFoundError = require("../errors/BasRequest")
+const BadRequestError = require("../errors/BasRequest");
+const authService = require("../services/auth.service");
+const NotFoundError = require("../errors/NotFound");
 
 module.exports = {
     // 회원가입
-    signup(req, res) {
+    async signup(req, res) {
         // 입력 검증
         const {username, password, email, name, phone} = req.body;
         
@@ -23,30 +23,24 @@ module.exports = {
             return res.status(error.statusCode).json(error.response());
         }
 
-        authService.signup({
-            username,
-            password,
-            email,
-            name,
-            phone
-        }).then(user => {
-            return res.status(201).json({
-                data: {
-                    user
-                },
-                meta: {
-                    timestamp: Date.now()
-                }
+        try {
+            const user = await authService.signup({
+                username,
+                password,
+                email,
+                name,
+                phone
             })
-        }).catch(err => {
-            console.log(err)
-            const customError = new NotFoundError(err.message);
-            return res.status(Number(customError.statusCode)).json(customError.response());
-        })
+
+            return res.status(201).json({ data: { user }, meta: { timestamp: Date.now() } });
+        } catch (err) {
+            // if service threw a known error, forward it; otherwise wrap
+            return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
+        }
     },
 
     // 로그인
-    login(req, res) {
+    async login(req, res) {
         // 입력 검증
         const {username, password} = req.body;
 
@@ -60,22 +54,15 @@ module.exports = {
             return res.status(error.statusCode).json(error.response());
         }
 
-        authService.login({
-            username, 
-            password
-        }).then(data => {
-            return res.status(200).json({
-                data: data,
-                meta: {
-                    timestamp: new Date()
-                }
-            })
-        }).catch(err => {
-            return res.status(err.statusCode).json(err.response())
-        })
+        try {
+            const data = await authService.login({ username, password });
+            return res.status(200).json({ data, meta: { timestamp: new Date() } });
+        } catch (err) {
+            return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
+        }
     },
 
-    logout(req, res) {
+    async logout(req, res) {
         // refresh Token 이 있는지 검증
         const {refreshToken} = req.body;
 
@@ -84,20 +71,15 @@ module.exports = {
             return res.status(error.statusCode).json(error.response());
         }
 
-        authService.logout(req.user, refreshToken)
-            .then(data => {
-                return res.status(200).json({
-                    data: data,
-                    meta: {
-                        timestamp: new Date()
-                    }
-                })
-            }).catch(err => {
-                return res.status(err.statusCode).json(err.response());
-            })
+        try {
+            const data = await authService.logout(req.user, refreshToken);
+            return res.status(200).json({ data, meta: { timestamp: new Date() } });
+        } catch (err) {
+            return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
+        }
     },
 
-    refresh(req, res) {
+    async refresh(req, res) {
         const {refreshToken} = req.body;
 
         if (!refreshToken) {
@@ -105,16 +87,11 @@ module.exports = {
             return res.status(error.statusCode).json(error.response());
         }
 
-        authService.refresh(req.user, refreshToken)
-            .then(data => {
-                return res.status(201).json({
-                    data: data,
-                    meta: {
-                        timestamp: new Date()
-                    }
-                })
-            }).catch(err => {
-                return res.status(err.statusCode).json(err.response());
-            })
+        try {
+            const data = await authService.refresh(req.user, refreshToken);
+            return res.status(201).json({ data, meta: { timestamp: new Date() } });
+        } catch (err) {
+            return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
+        }
     }
 }
