@@ -12,6 +12,7 @@ const wishlistRouter = require("./routes/wishlists.route");
 const bookRouter = require("./routes/books.route");
 const categoryRouter = require("./routes/categories.route");
 const cartRouter = require("./routes/carts.route")
+const reviewRouter = require("./routes/reviews.route");
 
 app.use(express.json());
 
@@ -22,6 +23,7 @@ app.use('/wishlists', wishlistRouter);
 app.use("/books", bookRouter)
 app.use("/categories", categoryRouter);
 app.use("/carts", cartRouter);
+app.use("/reviews", reviewRouter)
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

@@ -268,6 +268,37 @@ const options = {
                         }
                     },
                 },
+                Review: {
+                    type: "object",
+                    properties: {
+                        id: { type: "integer", example: 1 },
+                        user_id: { type: "integer", example: 11 },
+                        book_id: { type: "integer", example: 1 },
+                        content: { type: "string", example: "정말 재미있는 책이에요." },
+                        rating: { type: "integer", example: 5 },
+                        like_count: { type: "integer", example: 3 },
+                        created_at: { type: "string", example: "2025-12-13T17:46:41.482Z" }
+                    }
+                },
+                ReviewResponse: {
+                    type: "object",
+                    properties: {
+                        data: { $ref: "#/components/schemas/Review" },
+                        meta: { $ref: "#/components/schemas/Meta" }
+                    }
+                },
+                ReviewLikeStatusResponse: {
+                    type: "object",
+                    properties: {
+                        data: {
+                            type: "object",
+                            properties: {
+                                liked: { type: "boolean", example: true }
+                            }
+                        },
+                        meta: { $ref: "#/components/schemas/Meta" }
+                    }
+                },
             },
         },
     },
