@@ -32,8 +32,9 @@ module.exports = {
 
 	async findAll(req, res) {
 		try {
-			const books = await BookService.findAll();
-			return res.status(200).json({ data: books.map(sanitizeBook), meta: { timestamp: new Date() } });
+			const { page, perPage, sort } = req.query || {};
+			const { items, meta } = await BookService.findAllPaged({ page, perPage, sort });
+			return res.status(200).json({ data: items.map(sanitizeBook), meta: { timestamp: new Date(), ...meta } });
 		} catch (err) {
 			return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
 		}

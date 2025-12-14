@@ -11,6 +11,10 @@ module.exports = {
         return Book.findAll({...options, transaction});
     },
 
+    findAndCountAll(options = {}, transaction = null) {
+        return Book.findAndCountAll({ ...options, transaction });
+    },
+
     // read book by id
     findOneById(id, options = {}, transaction = null) {
         return Book.findByPk(id, {...options, transaction});

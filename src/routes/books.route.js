@@ -86,9 +86,32 @@ module.exports = router;
  *      summary: 책 목록 조회
  *      tags:
  *          - Books
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: 요청할 페이지 번호 (1-indexed)
+ *            required: false
+ *          - in: query
+ *            name: perPage
+ *            schema:
+ *              type: integer
+ *            description: 페이지당 아이템 개수 (최대 100)
+ *            required: false
+ *          - in: query
+ *            name: sort
+ *            schema:
+ *              type: string
+ *            description: 정렬 기준 (price_asc, price_desc, title_asc, title_desc, created_at_asc, created_at_desc)
+ *            required: false
  *      responses:
  *          200:
- *              description: 성공 (책 배열 반환)
+ *              description: 성공 (페이징된 책 배열 반환)
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/BooksPagedResponse"
  */
 
 /**

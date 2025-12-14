@@ -299,6 +299,35 @@ const options = {
                         meta: { $ref: "#/components/schemas/Meta" }
                     }
                 },
+                Book: {
+                    type: "object",
+                    properties: {
+                        id: { type: "integer", example: 1 },
+                        title: { type: "string", example: "노르웨이의 숲" },
+                        description: { type: "string", example: "좋은 소설" },
+                        price: { type: "integer", example: 15000 },
+                        stock_quantity: { type: "integer", example: 20 },
+                        seller_id: { type: "integer", example: 11 },
+                        created_at: { type: "string", example: "2025-12-13T17:46:41.482Z" }
+                    }
+                },
+                BooksPagedResponse: {
+                    type: "object",
+                    properties: {
+                        data: { type: "array", items: { $ref: "#/components/schemas/Book" } },
+                        meta: {
+                            type: "object",
+                            properties: {
+                                timestamp: { type: "string", example: "2025-12-13T17:46:41.482Z" },
+                                page: { type: "integer", example: 1 },
+                                perPage: { type: "integer", example: 10 },
+                                sort: { type: "string", example: "created_at_desc" },
+                                totalItems: { type: "integer", example: 123 },
+                                totalPages: { type: "integer", example: 13 }
+                            }
+                        }
+                    }
+                },
                 OrderItem: {
                     type: "object",
                     properties: {

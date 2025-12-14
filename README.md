@@ -19,7 +19,7 @@ npm start
 Optional: Generate a static swagger.json file:
 
 ```bash
-node tools/generate-swagger.js
+node ./src/utils/generate-swagger.js
 ```
 
 # 25_2_WebServiceDesign_-Assignment2

@@ -29,8 +29,47 @@ module.exports = {
 	},
 
 	async findAll() {
+		// legacy findAll without pagination
 		const books = await BookRepository.findAll();
-		return books;
+		return { items: books, meta: {} };
+	},
+
+	async findAllPaged({ page = 1, perPage = 10, sort = "created_at_desc" } = {}) {
+		page = Number(page) || 1;
+		perPage = Number(perPage) || 10;
+		// enforce reasonable limits
+		const MAX_PER_PAGE = 100;
+		if (perPage > MAX_PER_PAGE) perPage = MAX_PER_PAGE;
+		if (page < 1) page = 1;
+
+		// map sort param to sequelize order
+		const SORT_MAP = {
+			"price_asc": [["price", "ASC"]],
+			"price_desc": [["price", "DESC"]],
+			"title_asc": [["title", "ASC"]],
+			"title_desc": [["title", "DESC"]],
+			"created_at_asc": [["created_at", "ASC"]],
+			"created_at_desc": [["created_at", "DESC"]]
+		};
+
+		const order = SORT_MAP[sort] || SORT_MAP["created_at_desc"];
+
+		const offset = (page - 1) * perPage;
+
+		const result = await BookRepository.findAndCountAll({ limit: perPage, offset, order });
+		const totalItems = result.count || 0;
+		const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / perPage);
+
+		return {
+			items: result.rows,
+			meta: {
+				page,
+				perPage,
+				sort,
+				totalItems,
+				totalPages
+			}
+		};
 	},
 
 	async getById(id) {
