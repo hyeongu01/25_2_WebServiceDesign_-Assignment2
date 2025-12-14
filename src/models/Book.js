@@ -9,9 +9,11 @@ const Book = sequelize.define("Book", {
     },
     title: {
         type: DataTypes.STRING(300),
+        allowNull: false,
     },
     publisher: {
         type: DataTypes.STRING(100),
+        defaultValue: null,
     },
     published_date: {
         type: DataTypes.DATEONLY,

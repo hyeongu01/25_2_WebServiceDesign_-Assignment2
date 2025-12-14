@@ -6,43 +6,45 @@
  */
 const express = require("express");
 const router = express.Router();
-const BookController = require("../controllers/user.controller");
+const BookController = require("../controllers/book.controller");
+
+const Middleware = require("../middlewares/auth.middleware")
 
 // 책 등록
-router.post("/");
+router.post("/", Middleware.authenticate, Middleware.authenticateRole(["SELLER"]), BookController.create);
 
 // 책 목록 조회
-router.get("/");
+router.get("/", BookController.findAll);
 
 // 책 상세 조회
-router.get("/:id");
+router.get("/:id", BookController.detail);
 
 // 책 수정
-router.patch("/:id");
+router.patch("/:id", Middleware.authenticate, Middleware.authenticateRole(["SELLER"]), BookController.update);
 
 // 책 삭제
-router.delete("/:id");
+router.delete("/:id", Middleware.authenticate, Middleware.authenticateRole(["SELLER", "ADMIN"]), BookController.delete);
 
 // books <-> categories
 // 카테고리 추가
-router.post("/:bookId/categories/:categoryId");
+router.post("/:bookId/categories/:categoryId", Middleware.authenticate, BookController.appendCategory);
 
 // 카테고리 삭제
-router.delete("/:bookId/categories/:categoryId");
+router.delete("/:bookId/categories/:categoryId", Middleware.authenticate, BookController.deleteCategory);
 
 // books <-> authors
 // 저자 추가
-router.post("/:bookId/authors/:authorId");
+router.post("/:bookId/authors/:authorId", Middleware.authenticate, BookController.appendAuthor);
 
 // 저자 삭제
-router.delete("/:bookId/authors/:authorId");
+router.delete("/:bookId/authors/:authorId", Middleware.authenticate, BookController.deleteAuthor);
 
 // books <-> reviews
 // 도서에 리뷰 생성
-router.post("/:id/reviews");
+router.post("/:id/reviews", Middleware.authenticate, BookController.createReview);
 
 // 도서의 리뷰 전체 확인
-router.get("/:id/reviews");
+router.get("/:id/reviews", BookController.findAllReviews);
 
 module.exports = router;
 
@@ -53,6 +55,8 @@ module.exports = router;
  *      summary: 책 등록
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      requestBody:
  *          content:
  *              application/json:
@@ -66,13 +70,13 @@ module.exports = router;
  *                              type: string
  *                          price:
  *                              type: number
- *                          seller_id:
- *                              type: integer
  *      responses:
  *          201:
  *              description: 책 등록 성공
  *          400:
  *              description: 입력 body 누락
+ *          403:
+ *              description: seller 가 아닌 유저
  */
 
 /**
@@ -115,6 +119,8 @@ module.exports = router;
  *      summary: 책 수정
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -137,6 +143,12 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 수정 성공
+ *          401:
+ *              description: 미인증
+ *          403:
+ *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 책 찾을 수 없음
  */
 
 /**
@@ -146,6 +158,8 @@ module.exports = router;
  *      summary: 책 삭제
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -156,6 +170,12 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 삭제 성공
+ *          401:
+ *              description: 미인증
+ *          403:
+ *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 책 찾을 수 없음
  */
 
 /**
@@ -165,6 +185,8 @@ module.exports = router;
  *      summary: 도서에 카테고리 추가
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: bookId
@@ -181,6 +203,12 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 추가 성공
+ *          401:
+ *              description: 미인증
+ *          403:
+ *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 책 찾을 수 없음
  */
 
 /**
@@ -190,6 +218,8 @@ module.exports = router;
  *      summary: 도서에서 카테고리 제거
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: bookId
@@ -206,6 +236,12 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 제거 성공
+ *          401:
+ *              description: 미인증
+ *          403:
+ *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 책 찾을 수 없음
  */
 
 /**
@@ -215,6 +251,8 @@ module.exports = router;
  *      summary: 도서에 저자 추가
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: bookId
@@ -231,6 +269,12 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 추가 성공
+ *          401:
+ *              description: 미인증
+ *          403:
+ *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 책 찾을 수 없음
  */
 
 /**
@@ -240,6 +284,8 @@ module.exports = router;
  *      summary: 도서에서 저자 제거
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: bookId
@@ -256,6 +302,12 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 제거 성공
+ *          401:
+ *              description: 미인증
+ *          403:
+ *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 책 찾을 수 없음
  */
 
 /**
@@ -265,6 +317,8 @@ module.exports = router;
  *      summary: 도서에 리뷰 등록
  *      tags:
  *          - Books
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -286,6 +340,8 @@ module.exports = router;
  *      responses:
  *          201:
  *              description: 등록 성공
+ *          404:
+ *              description: id = {id} 인 도서를 찾을 수 없습니다.
  */
 
 /**

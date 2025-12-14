@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+
 // 카테고리 추가
 router.post("/");
 

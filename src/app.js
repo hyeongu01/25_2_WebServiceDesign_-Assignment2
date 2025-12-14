@@ -9,6 +9,7 @@ const authRouter = require("./routes/auth.route");
 const usersRouter = require("./routes/users.route");
 const authorRouter = require("./routes/authors.route");
 const wishlistRouter = require("./routes/wishlists.route");
+const bookRouter = require("./routes/books.route");
 
 app.use(express.json());
 
@@ -16,9 +17,17 @@ app.use("/auth", authRouter);
 app.use('/users', usersRouter);
 app.use('/authors', authorRouter)
 app.use('/wishlists', wishlistRouter);
+app.use("/books", bookRouter)
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
+app.use((err, req, res, next) => {
+    return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
+});
+
+app.use("/", (req, res) => {
+    res.send("서버 정상 동작중")
+})
 
 module.exports = app;
