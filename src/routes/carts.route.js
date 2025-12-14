@@ -1,23 +1,23 @@
-/**
- * @openapi
- * tags:
- *   - name: Carts
- *     description: Cart endpoints
- */
 const express = require("express");
 const router = express.Router();
 
+const Middleware = require("../middlewares/auth.middleware");
+const CartController = require("../controllers/cart.controller");
+
 // 카트 읽기
-router.get("/");
+router.get("/", Middleware.authenticate, CartController.findAll);
 
 // 카트 항목 추가
-router.post("/items");
+router.post("/items", Middleware.authenticate, CartController.append);
 
 // 카트 항목 변경 (수량, 체크 여부)
-router.patch("/items/:bookId");
+router.patch("/items/:bookId", Middleware.authenticate, CartController.update);
 
 // 카트 항목 삭제
-router.delete("/items/:bookId");
+router.delete("/items/:bookId", Middleware.authenticate, CartController.delete);
+
+module.exports = router
+
 /**
  * @swagger
  * /carts:
@@ -25,9 +25,15 @@ router.delete("/items/:bookId");
  *      summary: 장바구니 조회
  *      tags:
  *          - Carts
+ *      security:
+ *          - bearerAuth: []
  *      responses:
  *          200:
  *              description: 성공
+ *          401:
+ *              description: 인증 필요
+ *          404:
+ *              description: 카트가 존재하지 않음
  */
 
 /**
@@ -37,6 +43,8 @@ router.delete("/items/:bookId");
  *      summary: 장바구니 항목 추가
  *      tags:
  *          - Carts
+ *      security:
+ *          - bearerAuth: []
  *      requestBody:
  *          content:
  *              application/json:
@@ -51,6 +59,12 @@ router.delete("/items/:bookId");
  *      responses:
  *          201:
  *              description: 추가 성공
+ *          400:
+ *              description: 입력 body 누락 또는 유효성 오류
+ *          401:
+ *              description: 인증 필요
+ *          404:
+ *              description: 책을 찾을 수 없음
  */
 
 /**
@@ -60,6 +74,8 @@ router.delete("/items/:bookId");
  *      summary: 장바구니 항목 변경
  *      tags:
  *          - Carts
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: bookId
@@ -77,6 +93,12 @@ router.delete("/items/:bookId");
  *      responses:
  *          200:
  *              description: 변경 성공
+ *          400:
+ *              description: 입력 body 오류
+ *          401:
+ *              description: 인증 필요
+ *          404:
+ *              description: cart 에 해당 항목이 없음
  */
 
 /**
@@ -86,6 +108,8 @@ router.delete("/items/:bookId");
  *      summary: 장바구니 항목 삭제
  *      tags:
  *          - Carts
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: bookId
@@ -95,6 +119,12 @@ router.delete("/items/:bookId");
  *      responses:
  *          200:
  *              description: 삭제 성공
+ *          400:
+ *              description: 입력 오류
+ *          401:
+ *              description: 인증 필요
+ *          404:
+ *              description: cart 에 해당 항목이 없음
  */
 
 

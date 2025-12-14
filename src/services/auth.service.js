@@ -18,6 +18,7 @@ module.exports = {
         const transaction = await sequelize.transaction();
 
         try {
+            
             // 중복 체크
             const user = await UserRepository.findOneByUsername(username, transaction);
             if (user) {
@@ -27,14 +28,20 @@ module.exports = {
             // password 암호화
             const hashed_password = await hash(password)
 
+            let newUser
+
             // User 생성
-            const newUser = await UserRepository.create({
-                username,
-                hashed_password,
-                name,
-                email,
-                phone
-            }, transaction)
+            try {
+                newUser = await UserRepository.create({
+                    username,
+                    hashed_password,
+                    name,
+                    email,
+                    phone
+                }, transaction)
+            } catch(err) {
+                throw new ConfilictError("email 혹은 phone 이 중복됩니다.")
+            }
 
             // cart 생성
             const newCart = await CartRepository.create({
@@ -45,6 +52,7 @@ module.exports = {
             const newWishlist = await WishlistRepository.create({
                 user_id: newUser.id
             }, transaction)
+            
 
             await transaction.commit();
             return newUser;

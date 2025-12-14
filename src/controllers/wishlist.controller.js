@@ -11,7 +11,6 @@ module.exports = {
                 meta: {timestamp: new Date()}
             })
         } catch (err) {
-            // if service threw a known error, forward it; otherwise wrap
             return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
         }
     },

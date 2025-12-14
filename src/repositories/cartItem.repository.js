@@ -15,7 +15,7 @@ module.exports = {
     },
 
     findById(cartId, bookId, transaction) {
-        return Cart_Item.findByPk()
+        return Cart_Item.findOne({ where: { cart_id: cartId, book_id: bookId }, transaction });
     },
 
     // update

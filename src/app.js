@@ -11,6 +11,7 @@ const authorRouter = require("./routes/authors.route");
 const wishlistRouter = require("./routes/wishlists.route");
 const bookRouter = require("./routes/books.route");
 const categoryRouter = require("./routes/categories.route");
+const cartRouter = require("./routes/carts.route")
 
 app.use(express.json());
 
@@ -20,6 +21,7 @@ app.use('/authors', authorRouter)
 app.use('/wishlists', wishlistRouter);
 app.use("/books", bookRouter)
 app.use("/categories", categoryRouter);
+app.use("/carts", cartRouter);
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

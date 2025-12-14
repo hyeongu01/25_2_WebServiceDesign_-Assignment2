@@ -1,9 +1,3 @@
-/**
- * @openapi
- * tags:
- *   - name: Reviews
- *     description: Review endpoints and likes
- */
 const express = require("express");
 const { route } = require("./users.route");
 const router = express.Router();
