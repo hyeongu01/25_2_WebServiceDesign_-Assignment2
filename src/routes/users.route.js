@@ -12,7 +12,7 @@ router.get("/me", Middleware.authenticate, UserController.getMyUser)
 // 유저 전체 조회
 router.get("/", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), UserController.getAllUsers);
 
-// 숫자 id만 허용하도록 라우트 패턴을 제한 (예: /users/1)
+// 유저 상세 조회
 router.get("/:id", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), UserController.getUserById);
 
 // 수정
@@ -38,6 +38,8 @@ module.exports = router;
  *      description: 로그인된 사용자 자신의 프로필을 조회합니다.
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      responses:
  *          200:
  *              description: 성공 (사용자 정보 반환)
@@ -68,6 +70,7 @@ module.exports = router;
  *                          $ref: "#/components/schemas/UsersResponse"
  *          403:
  *              description: 권한 없음
+
  */
 
 /**
@@ -77,6 +80,8 @@ module.exports = router;
  *      summary: 유저 상세 조회 (관리자 권한 필요)
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -104,6 +109,8 @@ module.exports = router;
  *      summary: 유저 수정 (관리자 권한 필요)
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -140,6 +147,8 @@ module.exports = router;
  *      summary: 내 정보 수정
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      requestBody:
  *          content:
  *              application/json:
@@ -167,6 +176,8 @@ module.exports = router;
  *      summary: 내 비밀번호 변경
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      requestBody:
  *          content:
  *              application/json:
@@ -181,6 +192,8 @@ module.exports = router;
  *      responses:
  *          204:
  *              description: 성공
+ *          400:
+ *              description: oldPassword 혹은 newPassword 가 없습니다.
  *          401:
  *              description: 기존 비밀번호 불일치 또는 로그인 필요
  */
@@ -192,6 +205,8 @@ module.exports = router;
  *      summary: 내 계정 삭제
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      responses:
  *          204:
  *              description: 성공
@@ -206,6 +221,8 @@ module.exports = router;
  *      summary: 유저 삭제 (관리자 권한 필요)
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id
@@ -227,6 +244,8 @@ module.exports = router;
  *      summary: 유저 복구 (관리자 권한 필요)
  *      tags:
  *          - Users
+ *      security:
+ *          - bearerAuth: []
  *      parameters:
  *          - in: path
  *            name: id

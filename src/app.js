@@ -7,11 +7,13 @@ const swaggerSpec = require("./config/swagger");
 // routers
 const authRouter = require("./routes/auth.route");
 const usersRouter = require("./routes/users.route");
+const authorRouter = require("./routes/authors.route")
 
 app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use('/users', usersRouter);
+app.use('/authors', authorRouter)
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

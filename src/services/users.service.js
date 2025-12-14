@@ -3,57 +3,37 @@ const UserRepository = require("../repositories/user.repository");
 
 // 에러 코드
 const NotFoundError = require("../errors/NotFound");
+const ForbiddenError = require("../errors/Forbidden");
 
 module.exports = {
     async getUserById(id) {
-        const transaction = await sequelize.transaction();
+        // 유저 불러오기
+        const user = await UserRepository.findOneById(id);
 
-        try {
-            // 유저 불러오기
-            const user = await UserRepository.findOneById(id, {}, transaction);
-
-            if (!user) {
-                throw new NotFoundError(`user_id: ${id} 인 유저가 없습니다.`);
-            }
-
-            await transaction.commit();
-            return user;
-        } catch(err) {
-            await transaction.rollback();
-            throw err;
+        if (!user) {
+            throw new NotFoundError(`user_id: ${id} 인 유저가 없습니다.`);
         }
+        return user;
     },
 
     async getMyUser(id) {
-        const transaction = await sequelize.transaction()
+        const user = await UserRepository.findOneById(id);
 
-        try {
-            const user = await UserRepository.findOneById(id, {}, transaction);
-
-            if (!user) {
-                throw new NotFoundError(`user_id: ${id} 인 유저가 없습니다.`);
-            }
-
-            await transaction.commit();
-            return user;
-        } catch(err) {
-            await transaction.rollback();
-            throw err;
+        if (!user) {
+            throw new NotFoundError(`user_id: ${id} 인 유저가 없습니다.`);
         }
+
+        if (req.user.id !== user.id) {
+            throw new ForbiddenError("접근 권한이 없습니다.")
+        }
+
+        return user;
     }
     ,
 
     async getAllUsers() {
-        const transaction = await sequelize.transaction();
-
-        try {
-            const users = await UserRepository.findAll({}, transaction);
-            await transaction.commit();
-            return users;
-        } catch (err) {
-            await transaction.rollback();
-            throw err;
-        }
+        const users = await UserRepository.findAll();
+        return users;
     },
 
     async updateUser(id, newData) {
@@ -64,15 +44,6 @@ module.exports = {
             const user = await UserRepository.findOneById(id, {}, transaction);
             if (!user) {
                 throw new NotFoundError(`user_id: ${id} 인 유저가 없습니다.`);
-            }
-
-            // 비밀번호 변경 시 해시 처리
-            if (newData.password || newData.hasOwnProperty('password')) {
-                // hash password
-                const { hash } = require("../utils/bcrypt");
-                const hashed = await hash(newData.password);
-                newData.hashed_password = hashed;
-                delete newData.password;
             }
 
             const [affected] = await UserRepository.update(id, newData, transaction);

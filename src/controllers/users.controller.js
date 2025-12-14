@@ -15,19 +15,19 @@ function sanitizeUser(user) {
 
 module.exports = {
     async getUserById(req, res) {
-        // 입력 검증
-        const userId = Number(req.params.id);
-
-        if (!userId) {
-            throw new BadRequestError("path parameter: {id} 가 없습니다.");
-        }
-
-        // 내부연산
         try {
-            const data = await UserService.getUserById(userId);
+            // input validation
+            const userId = Number(req.params.id);
+
+            if (!userId) {
+                throw new BadRequestError("path parameter: id 가 없습니다.");
+            }
+
+            // processing
+            const user = await UserService.getUserById(userId);
 
             return res.status(200).json({
-                data: data,
+                data: sanitizeUser(user),
                 meta: {
                     timestamp: new Date()
                 }
@@ -59,17 +59,11 @@ module.exports = {
         // 내부 연산
         try {
             const users = await UserService.getAllUsers();
-
-            if (!users || users.length === 0) {
-                throw new NotFoundError("조회할 유저가 없습니다.");
-            }
-
             const safe = users.map(sanitizeUser);
             return res.status(200).json({
                 data: safe,
                 meta: {timestamp: new Date()}
             })
-
         } catch (err) {
             return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
         }
@@ -110,16 +104,20 @@ module.exports = {
     },
 
     async updateUser(req, res) {
-        // 입력 검증
-        const id = Number(req.params.id);
-        const payload = req.body;
-
-        if (!id) {
-            throw new BadRequestError("path parameter: {id} 가 없습니다.");
-        }
-
-        // 내부 연산
         try {
+            // input validation
+            const id = Number(req.params.id);
+            const payload = req.body;
+
+            if (!id) {
+                throw new BadRequestError("path parameter: {id} 가 없습니다.");
+            }
+
+            if (payload.password) {
+                throw new BadRequestError("비밀번호는 변경할 수 없습니다.")
+            }
+
+            // processing
             const updated = await UserService.updateUser(id, payload);
             return res.status(200).json({ data: sanitizeUser(updated), meta: { timestamp: new Date() } });
         } catch (err) {
@@ -128,14 +126,20 @@ module.exports = {
     },
 
     async updateMyUser(req, res) {
-        const id = Number(req.user?.id);
-        const payload = req.body;
-
-        if (!id) {
-            throw new BadRequestError("로그인 정보가 없습니다.");
-        }
-
         try {
+            // input validation
+            const id = Number(req.user?.id);
+            const payload = req.body;
+
+            if (!id) {
+                throw new BadRequestError("로그인 정보가 없습니다.");
+            }
+
+            if (payload.password) {
+                throw new BadRequestError("비밀번호는 변경할 수 없습니다.")
+            }
+
+            // processing
             const updated = await UserService.updateUser(id, payload);
             return res.status(200).json({ data: sanitizeUser(updated), meta: { timestamp: new Date() } });
         } catch (err) {
@@ -144,18 +148,21 @@ module.exports = {
     },
 
     async changeMyPassword(req, res) {
-        const id = Number(req.user?.id);
-        const { oldPassword, newPassword } = req.body;
-
-        if (!id) {
-            throw new BadRequestError("로그인 정보가 없습니다.");
-        }
-
-        if (!oldPassword || !newPassword) {
-            throw new BadRequestError("oldPassword 또는 newPassword가 없습니다.");
-        }
 
         try {
+            // input validation
+            const id = Number(req.user?.id);
+            const { oldPassword, newPassword } = req.body;
+
+            if (!id) {
+                throw new BadRequestError("로그인 정보가 없습니다.");
+            }
+
+            if (!oldPassword || !newPassword) {
+                throw new BadRequestError("oldPassword 또는 newPassword가 없습니다.");
+            }
+
+            // processing
             await UserService.changePassword(id, oldPassword, newPassword);
             return res.status(200).json({ data: { message: "비밀번호 변경 완료" }, meta: { timestamp: new Date() } });
         } catch (err) {
@@ -164,11 +171,15 @@ module.exports = {
     },
 
     async deleteMyUser(req, res) {
-        const id = Number(req.user?.id);
-        if (!id) {
-            throw new BadRequestError("로그인 정보가 없습니다.");
-        }
         try {
+            // input validation
+            const id = Number(req.user?.id);
+
+            if (!id) {
+                throw new BadRequestError("로그인 정보가 없습니다.");
+            }
+            
+            // processing
             await UserService.softDeleteUser(id);
             return res.status(200).json({ data: { message: "유저 삭제 완료" }, meta: { timestamp: new Date() } });
         } catch (err) {
