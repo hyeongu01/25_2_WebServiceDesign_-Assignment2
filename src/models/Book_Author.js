@@ -14,6 +14,12 @@ const Book_Author = sequelize.define("Book_Author", {
     timestamps: false,
     tableName: "Book_Author",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["book_id", "author_id"]
+        }
+    ]
 });
 
 module.exports = Book_Author;

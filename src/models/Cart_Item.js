@@ -10,6 +10,12 @@ const Cart_Item = sequelize.define("Cart_Item", {
     timestamps: false,
     tableName: "Cart_Item",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["cart_id", 'book_id']
+        }
+    ]
 });
 
 module.exports = Cart_Item;

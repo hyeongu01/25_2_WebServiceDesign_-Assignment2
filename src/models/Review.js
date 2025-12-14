@@ -13,6 +13,12 @@ const Review = sequelize.define("Review", {
     paranoid: true,
     tableName: "Review",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["user_id", 'book_id']
+        }
+    ]
 });
 
 module.exports = Review;

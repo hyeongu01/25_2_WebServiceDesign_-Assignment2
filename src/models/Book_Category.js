@@ -14,6 +14,12 @@ const Book_Category = sequelize.define("Book_Category", {
     timestamps: false,
     tableName: "Book_Category",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["book_id", "category_id"]
+        }
+    ]
 });
 
 module.exports = Book_Category;

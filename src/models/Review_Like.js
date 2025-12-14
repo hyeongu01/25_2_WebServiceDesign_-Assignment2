@@ -9,6 +9,12 @@ const Review_Like = sequelize.define("Review_Like", {
     timestamps: false,
     tableName: "Review_Like",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["user_id", "review_id"]
+        }
+    ],
 });
 
 module.exports = Review_Like;

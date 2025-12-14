@@ -72,7 +72,7 @@ Order_Item.belongsTo(Book, { foreignKey: "book_id" });
 
 
 // 중앙에서 한 번만 sync 실행
-// sequelize.sync({force: true})
+sequelize.sync({force: true})
 
 // models 객체 내보내기
 module.exports = {

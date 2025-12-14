@@ -23,6 +23,12 @@ const Author = sequelize.define("Author", {
     timestamps: false,
     tableName: "Author",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["name", "birth"]
+        }
+    ]
 });
 
 module.exports = Author;

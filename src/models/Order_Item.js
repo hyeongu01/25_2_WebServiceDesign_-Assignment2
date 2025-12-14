@@ -10,6 +10,12 @@ const Order_Item = sequelize.define("Order_Item", {
     timestamps: false,
     tableName: "Order_Item",
     underscored: true,
+    indexes: [
+        {
+            unique: true,
+            fields: ["order_id", "book_id"]
+        }
+    ]
 });
 
 module.exports = Order_Item;
