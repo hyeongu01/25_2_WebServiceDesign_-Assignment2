@@ -1,18 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
+const Middleware = require("../middlewares/auth.middleware");
+const CategoryController = require("../controllers/category.controller")
 
 // 카테고리 추가
-router.post("/");
+router.post("/", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), CategoryController.create);
 
 // 카테고리 전부 읽기
-router.get("/");
+router.get("/", CategoryController.findAll);
 
 // 카테고리 상세 보기
-router.get("/:id");
+router.get("/:id", CategoryController.findOneById);
 
 // 카테고리 삭제
-router.delete("/:id");
+router.delete("/:id", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), CategoryController.delete);
 
 module.exports = router;
 
