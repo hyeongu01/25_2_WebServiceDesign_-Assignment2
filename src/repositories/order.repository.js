@@ -8,10 +8,14 @@ module.exports = {
 
     // read
     findAll(options = {}, transaction = null) {
-        return Order.findALl({
+        return Order.findAll({
             ...options,
             transaction
         });
+    },
+
+    findAllByUserId(userId, options = {}, transaction = null) {
+        return Order.findAll({ where: { user_id: userId }, ...options, transaction });
     },
 
     findOneById(id, transaction = null) {

@@ -299,6 +299,39 @@ const options = {
                         meta: { $ref: "#/components/schemas/Meta" }
                     }
                 },
+                OrderItem: {
+                    type: "object",
+                    properties: {
+                        book_id: { type: "integer", example: 1 },
+                        quantity: { type: "integer", example: 2 },
+                        price_at_order: { type: "integer", example: 35000 }
+                    }
+                },
+                Order: {
+                    type: "object",
+                    properties: {
+                        id: { type: "integer", example: 1 },
+                        user_id: { type: "integer", example: 11 },
+                        total_price: { type: "integer", example: 70000 },
+                        status: { type: "string", example: "PENDING" },
+                        order_items: { type: "array", items: { $ref: "#/components/schemas/OrderItem" } },
+                        created_at: { type: "string", example: "2025-12-13T17:46:41.482Z" }
+                    }
+                },
+                OrderResponse: {
+                    type: "object",
+                    properties: {
+                        data: { $ref: "#/components/schemas/Order" },
+                        meta: { $ref: "#/components/schemas/Meta" }
+                    }
+                },
+                OrdersResponse: {
+                    type: "object",
+                    properties: {
+                        data: { type: "array", items: { $ref: "#/components/schemas/Order" } },
+                        meta: { $ref: "#/components/schemas/Meta" }
+                    }
+                },
             },
         },
     },

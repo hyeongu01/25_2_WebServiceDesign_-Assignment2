@@ -59,6 +59,30 @@ module.exports = {
         }
     },
 
+    async changeUserRole(id, role) {
+        const VALID_ROLES = ["ADMIN", "CUSTOMER", "SELLER"];
+        if (!VALID_ROLES.includes(role)) {
+            const BadRequestError = require("../errors/BasRequest");
+            throw new BadRequestError("유효하지 않은 role 입니다.");
+        }
+
+        const transaction = await sequelize.transaction();
+        try {
+            const user = await UserRepository.findOneById(id, {}, transaction);
+            if (!user) {
+                throw new NotFoundError(`user_id: ${id} 인 유저가 없습니다.`);
+            }
+
+            await UserRepository.update(id, { role }, transaction);
+            const updated = await UserRepository.findOneById(id, {}, transaction);
+            await transaction.commit();
+            return updated;
+        } catch (err) {
+            await transaction.rollback();
+            throw err;
+        }
+    },
+
     async changePassword(id, oldPassword, newPassword) {
         const transaction = await sequelize.transaction();
         const { compare, hash } = require("../utils/bcrypt");

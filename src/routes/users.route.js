@@ -17,6 +17,7 @@ router.get("/:id", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"
 
 // 수정
 router.patch("/:id", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), UserController.updateUser);
+router.patch("/:id/role", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), UserController.changeUserRole);
 router.patch("/me", Middleware.authenticate, UserController.updateMyUser);
 router.patch("/me/password", Middleware.authenticate, UserController.changeMyPassword);
 
@@ -64,12 +65,53 @@ module.exports = router;
  *      responses:
  *          200:
  *              description: 성공 (사용자 배열 반환)
+ */
+
+/**
+ * @swagger
+ * /users/{id}/role:
+ *  patch:
+ *      summary: 유저 역할 변경 (관리자 권한 필요)
+ *      tags:
+ *          - Users
+ *      security:
+ *          - bearerAuth: []
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: integer
+ *            required: true
+ *            description: 유저 ID
+ *      requestBody:
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      required: ["role"]
+ *                      properties:
+ *                          role:
+ *                              type: string
+ *                              description: ADMIN, CUSTOMER, SELLER 중 하나
+ *      responses:
+ *          200:
+ *              description: 성공 (변경된 유저 정보)
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: "#/components/schemas/UsersResponse"
+ *                          $ref: "#/components/schemas/SignupResponse"
+ *          400:
+ *              description: 요청 오류 (잘못된 role)
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/ErrorResponse"
  *          403:
  *              description: 권한 없음
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/ErrorResponse"
 
  */
 

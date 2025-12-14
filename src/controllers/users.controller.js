@@ -125,6 +125,21 @@ module.exports = {
         }
     },
 
+    async changeUserRole(req, res) {
+        try {
+            const id = Number(req.params.id);
+            const { role } = req.body || {};
+
+            if (!id) throw new BadRequestError("path parameter: {id} 가 없습니다.");
+            if (!role) throw new BadRequestError("body: role 이 필요합니다.");
+
+            const updated = await UserService.changeUserRole(id, role);
+            return res.status(200).json({ data: sanitizeUser(updated), meta: { timestamp: new Date() } });
+        } catch (err) {
+            return res.status(err.statusCode || 500).json(err.response ? err.response() : { message: err.message });
+        }
+    },
+
     async updateMyUser(req, res) {
         try {
             // input validation
