@@ -13,15 +13,24 @@ module.exports = {
         });
     },
 
+    findOne(data, transaction = null) {
+        return Wishlist_Item.findOne({
+            where: data,
+            transaction
+        })
+    },
+
     delete(data, transaction = null) {
-        return Wishlist_Item.update({
-            deleted_at: new Date()
-        }, {where: data, transaction})
+        return Wishlist_Item.destroy({
+            where: data,
+            transaction
+        })
     },
 
     restore(data, transaction = null) {
-        return Wishlist_Item.update({
-            deleted_at: null
-        }, {where: data, transaction})
+        return Wishlist_Item.restore({
+            where: data,
+            transaction
+        })
     }
 }

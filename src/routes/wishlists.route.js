@@ -14,11 +14,6 @@ router.post("/items", Middleware.authenticate, WishlistController.append);
 router.delete("/items/:bookId", Middleware.authenticate, WishlistController.delete);
 
 
-
-
-
-
-
 module.exports = router;
 
 /**
