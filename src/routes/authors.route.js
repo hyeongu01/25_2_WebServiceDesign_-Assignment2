@@ -8,16 +8,16 @@ const Middleware = require("../middlewares/auth.middleware");
 router.post("/", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), AuthorController.create);
 
 // 저자들 확인
-router.get('/');
+router.get('/', AuthorController.findAll);
 
 // 저자 상세 확인
-router.get("/:id");
+router.get("/:id", AuthorController.findOneById);
 
 // 저자 수정
-router.patch("/:id");
+router.patch("/:id", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), AuthorController.update);
 
 // 저자 삭제
-router.delete("/:id");
+router.delete("/:id", Middleware.authenticate, Middleware.authenticateRole(["ADMIN"]), AuthorController.delete);
 
 module.exports = router;
 
@@ -39,6 +39,9 @@ module.exports = router;
  *                      properties:
  *                          name:
  *                              type: string
+ *                          birth:
+ *                              type: string
+ *                              example: 2000-01-01
  *      responses:
  *          201:
  *              description: 생성 성공
@@ -122,6 +125,8 @@ module.exports = router;
  *                          $ref: "#/components/schemas/CreateAuthorResponse"
  *          403:
  *              description: 권한 없음
+ *          404:
+ *              description: id = {id} 인 저자 없음
  */
 
 /**
@@ -146,4 +151,6 @@ module.exports = router;
  *                  application/json:
  *                      schema:
  *                          $ref: "#/components/schemas/StandardResponse"
+ *          404:
+ *              description: id = {id} 인 저자 없음
  */
